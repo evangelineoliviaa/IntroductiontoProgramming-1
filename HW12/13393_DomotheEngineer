@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<string.h>
+int putNum(char *ans,int cur,int val){
+    char temp[10];
+    int digit = 0;
+    while(val>0){
+        char value = val%10 +'0';
+        temp[digit++]=value;
+        val/=10;
+    }
+    for(int i = digit-1; i>=0;i--){
+        ans[cur++]=temp[i];
+    }
+    return cur;
+}
+int main(){
+    char simpen[1001];
+    char ans[1005*4];
+    scanf("%s",simpen);
+    int len = strlen(simpen);
+    int ctk = 0,cur = 0;
+    char pre = simpen[0];
+    for(int i = 0; i<=len;i++){
+        char c = simpen[i];
+        if(c == pre){
+            ctk++;
+        }else{
+            //printf("hi\n");
+            if(pre>='0'&& pre<='9'){
+              if(ctk>1){
+                  cur = putNum(ans,cur,ctk);
+                  ans[cur++]='\'';
+                  ans[cur++]=pre;
+                  ans[cur++]='\'';
+              }else{
+                ans[cur++]='\'';
+                ans[cur++]=pre;
+                ans[cur++]='\'';
+              }
+            }
+            else{
+                //printf("hi");
+                if(ctk<3){
+                    //printf("hi");
+                    while(ctk--){
+                        ans[cur++]=pre;
+                    }
+                }else{
+                    cur = putNum(ans,cur,ctk);
+                    ans[cur++]=pre;
+                }
+            }
+            pre = c,ctk = 1;
+        }
+        
+    }ans[cur] = '\0';
+	printf("%s\n",ans);
+    double newcur = cur;
+    double newlen = len;
+    float rate = newcur/newlen;
+    if(rate<1.0){
+        printf("Compress rate: %.3f\n", rate);
+    }else{
+        printf("The string can't zip\n");
+    }
+}
